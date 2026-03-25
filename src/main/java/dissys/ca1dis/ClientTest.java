@@ -27,6 +27,12 @@ import generated.grpc.sustainableActivityService.ActivityTrackGrpc.ActivityTrack
 import generated.grpc.sustainableActivityService.ActivityTrackGrpc;
 import generated.grpc.sustainableActivityService.ActivityType;
 
+// VirtualPet
+import generated.grpc.virtualPetService.VirtualPetGrpc.VirtualPetStub;
+import generated.grpc.virtualPetService.VirtualPetGrpc;
+import generated.grpc.virtualPetService.VirtualPetReply;
+import generated.grpc.virtualPetService.VirtualPetRequest;
+
 // IO and util tools
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -56,6 +62,7 @@ public class ClientTest {
     private final LoginServiceBlockingStub loginStub;
     private final ProductTrackStub productServiceStub;
     private final ActivityTrackStub activityTrackStub;
+    private final VirtualPetStub virtualPetStub;
 
     // constructor
     ClientTest(String name, int port) {
@@ -65,40 +72,62 @@ public class ClientTest {
         loginStub = LoginServiceGrpc.newBlockingStub(channel);
         productServiceStub = ProductTrackGrpc.newStub(channel);
         activityTrackStub = ActivityTrackGrpc.newStub(channel);
+        virtualPetStub = VirtualPetGrpc.newStub(channel);
     }
 
     public static void main(String[] args) throws Exception {
         // ClientTest instance
         ClientTest clientTest = new ClientTest("localhost", 50051);
-        //set a list of id
-        try {
-            List<ActivityRequest> requests = new ArrayList<>();
-
-            requests.add(
-                    ActivityRequest.newBuilder()
-                            .setActivityType(ActivityType.WALK)
-                            .build()
-            );
-
-            requests.add(
-                    ActivityRequest.newBuilder()
-                            .setActivityType(ActivityType.BUS)
-                            .build()
-            );
-
-            requests.add(
-                    ActivityRequest.newBuilder()
-                            .setActivityType(ActivityType.METRO)
-                            .build()
-            );
-
-            // invoke
-            clientTest.activityTrackTest(requests);
-
-        } finally {
+        //set request
+        // requeest is empty 
+        // invoke
+        try{
+            clientTest.getVirtualStatus();
+        }finally{
             clientTest.shutdown();
         }
+        
+        // close 
+    }
 
+    // Type: Service Stream 
+    // response => StreamObserver 
+    // 1 -> n
+    public void getVirtualStatus()throws InterruptedException {
+        System.out.println("Server Streaming - getVirtualStatus ");
+
+        CountDownLatch latch = new CountDownLatch(1);
+
+        VirtualPetRequest request = VirtualPetRequest.newBuilder().build();
+        // response observer
+        StreamObserver<VirtualPetReply> response = new StreamObserver<VirtualPetReply>() {
+            @Override
+            public void onNext(VirtualPetReply v) {
+                System.out.println("[SERVER REPLY] "
+                        + "\nLevel: " + v.getLevel()
+                        + "\nCredit: " + v.getPersonalCredit());
+            }
+
+            @Override
+            public void onError(Throwable thrwbl) {
+                System.out.println("[SERVER ERROR] " + thrwbl.getMessage());
+                latch.countDown();
+            }
+
+            @Override
+            public void onCompleted() {
+                System.out.println("[SERVER COMPLETED]");
+                latch.countDown();
+            }
+
+        };
+        // send request 
+        virtualPetStub.getPetStatus(request, response);
+
+        boolean finished = latch.await(5, TimeUnit.SECONDS);
+        if (!finished) {
+            System.out.println("[TIMEOUT] Server did not complete within 5 seconds.");
+        }
     }
 
     public void activityTrackTest(List<ActivityRequest> request) throws Exception {

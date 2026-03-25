@@ -35,30 +35,25 @@ public class VirtualPetServer extends VirtualPetImplBase {
     private static Logger logger = Logger.getLogger(VirtualPetServer.class.getName());
 
     public static void main(String[] args) throws Exception {
-        // Attribution
-        int port = 50051;
-        String name = "VirtualPetServer";
-        String type = "_grpc._tcp.local.";
-        // jmdns
-        JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
-        // instance 
+        // Create one or more Server instance
         VirtualPetServer virtualPetServer = new VirtualPetServer();
-        
-        try {
-            // Builde Server 
+        // Define port number
+        int port = 50051;
+        // Build Server with port number and register server instance
+        try{
             Server server = ServerBuilder.forPort(port).addService(virtualPetServer).build().start();
-            // register 
-            logger.info("ProducttrackServer started, listening on port: " + port);
-            // keep running
-            ServiceInfo info = ServiceInfo.create(type, name, port, "service=VirtualPetServer;version=1");
-            jmdns.registerService(info);
+            logger.info("Server started, listening on " + port);
+            // Keep server running 
             server.awaitTermination();
-
-        } catch (IOException e) {
+            // Handle Exceptions
+        }catch(IOException e){
+            // for start()
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        }catch(InterruptedException e){
+            // for awaitTermination()
             e.printStackTrace();
         }
+        
     }
 
     /**
