@@ -52,7 +52,7 @@ public class RCPgameClient implements AutoCloseable {
     private static Logger logger = Logger.getLogger(RCPgameClient.class.getName());
 
     // channel
-    private ManagedChannel channel;
+    private final ManagedChannel channel;
 
     // multiple stubs
     private final LoginServiceBlockingStub loginServiceStub;
@@ -212,6 +212,7 @@ public class RCPgameClient implements AutoCloseable {
 
             // Output 
             boolean result = loginResponse.getConfirmation().getResult();
+            
             String message = loginResponse.getConfirmation().getMessage();
             System.out.println("ID: " + loginRequest.getId() + ", Password: " + loginRequest.getPassword() + "\nResult: " + result + ", " + message);
             return result;

@@ -56,8 +56,8 @@ public class ServiceRegistration {
 
         //Construct a service description for registering with JmDNS
         //Parameters:
-        //  type - fully qualified service type name, such as _http._tcp.local..
-        //  name - unqualified service instance name, such as foobar
+        // type - fully qualified service type name, such as _http._tcp.local..
+        // name - unqualified service instance name, such as foobar
         // port - the local port on which the service runs
         // text - string describing the service
         //Returns:

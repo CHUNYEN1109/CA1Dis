@@ -28,6 +28,7 @@ public class RegisterServer {
         int port = 50051;
         String name = "gameServers";
         String type = "_grpc._tcp.local.";
+        String text = "services=ProductTrackService,LoginService,SustainableActivityService,VirtualPetService;version=1";
         // jmdns
         JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
 
@@ -46,7 +47,7 @@ public class RegisterServer {
                     .addService(virtualPetServer)
                     .build().start();
             // Register by jmdns 
-            ServiceInfo info = ServiceInfo.create(type, name, port, "services=ProductTrackService,LoginService,SustainableActivityService,VirtualPetService;version=1");
+            ServiceInfo info = ServiceInfo.create(type, name, port, text);
             jmdns.registerService(info);
             
             // As long as close jmdns

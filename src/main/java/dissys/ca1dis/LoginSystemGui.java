@@ -134,8 +134,8 @@ public class LoginSystemGui extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordTextFieldActionPerformed
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        String userId = userIdTextField.getText().trim();
-        String password = passwordTextField.getText().trim();
+        String userId = new String(userIdTextField.getText().trim());
+        String password = new String(passwordTextField.getText().trim());
         // set result
         loginButton.setEnabled(false);
         loginSystemResult.setText("Logging in...");
@@ -157,7 +157,9 @@ public class LoginSystemGui extends javax.swing.JFrame {
                     this.dispose();
                     
                 }else{
-                    loginSystemResult.setText("Login failed...");
+                    loginSystemResult.setText("Login failed...");  
+                    userIdTextField.setText("");
+                    passwordTextField.setText("");
                 }
             });
         }).start();
