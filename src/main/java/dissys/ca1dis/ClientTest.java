@@ -22,6 +22,11 @@ import generated.grpc.productTrackService.ProductTrackGrpc;
 import generated.grpc.sustainableActivityService.ActivityReply;
 import generated.grpc.sustainableActivityService.ActivityRequest;
 
+// Sustainable Activity
+import generated.grpc.sustainableActivityService.ActivityTrackGrpc.ActivityTrackStub;
+import generated.grpc.sustainableActivityService.ActivityTrackGrpc;
+import generated.grpc.sustainableActivityService.ActivityType;
+
 // IO and util tools
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -50,6 +55,7 @@ public class ClientTest {
     // stubs 
     private final LoginServiceBlockingStub loginStub;
     private final ProductTrackStub productServiceStub;
+    private final ActivityTrackStub activityTrackStub;
 
     // constructor
     ClientTest(String name, int port) {
@@ -58,21 +64,88 @@ public class ClientTest {
         // wrap stub into chanell
         loginStub = LoginServiceGrpc.newBlockingStub(channel);
         productServiceStub = ProductTrackGrpc.newStub(channel);
+        activityTrackStub = ActivityTrackGrpc.newStub(channel);
     }
 
     public static void main(String[] args) throws Exception {
         // ClientTest instance
         ClientTest clientTest = new ClientTest("localhost", 50051);
         //set a list of id
-        List<String> ids = Arrays.asList("A01", "A02", "XXX_NOT_EXIST", "A03");
-        // invoke
-        clientTest.productTrack(ids);
+        try {
+            List<ActivityRequest> requests = new ArrayList<>();
 
-        clientTest.shutdown();
+            requests.add(
+                    ActivityRequest.newBuilder()
+                            .setActivityType(ActivityType.WALK)
+                            .build()
+            );
+
+            requests.add(
+                    ActivityRequest.newBuilder()
+                            .setActivityType(ActivityType.BUS)
+                            .build()
+            );
+
+            requests.add(
+                    ActivityRequest.newBuilder()
+                            .setActivityType(ActivityType.METRO)
+                            .build()
+            );
+
+            // invoke
+            clientTest.activityTrackTest(requests);
+
+        } finally {
+            clientTest.shutdown();
+        }
 
     }
 
-    public void productTrack(List<String> productId) throws InterruptedException{
+    public void activityTrackTest(List<ActivityRequest> request) throws Exception {
+        System.out.println("Client-streaming - activityTrack test");
+
+        // countDown
+        CountDownLatch latch = new CountDownLatch(1);
+
+        // set reply straeam - output
+        StreamObserver<ActivityReply> responseObserver = new StreamObserver<ActivityReply>() {
+            @Override
+            public void onNext(ActivityReply v) {
+                System.out.println("Server reply DAY = " + v.getDay()
+                        + "\ntotalCredit: " + v.getPersonalCredit().getTotalCredit());
+            }
+
+            @Override
+            public void onError(Throwable thrwbl) {
+                System.out.println("Server ERROR: " + thrwbl.getMessage());
+                latch.countDown();
+            }
+
+            @Override
+            public void onCompleted() {
+                System.out.println("Server COMPLETED");
+                latch.countDown();
+            }
+
+        };
+        // set request stream - input
+        StreamObserver<ActivityRequest> trackActivity = activityTrackStub.trackActivity(responseObserver);
+        try {
+            for (ActivityRequest req : request) {
+                trackActivity.onNext(req);
+            }
+            // close 
+            trackActivity.onCompleted();
+        } catch (RuntimeException e) {
+            trackActivity.onError(e);
+            throw e;
+        }
+
+        latch.await(5, TimeUnit.SECONDS);
+
+    }
+
+    public void productTrack(List<String> productId) throws InterruptedException {
         System.out.println("Bi-directional - productTrack test");
 
         CountDownLatch latch = new CountDownLatch(1);

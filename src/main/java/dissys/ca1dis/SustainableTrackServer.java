@@ -41,27 +41,20 @@ public class SustainableTrackServer extends ActivityTrackImplBase {
     private static Logger logger = Logger.getLogger(SustainableTrackServer.class.getName());
 
     public static void main(String[] args)throws Exception {
-        // Attribution
-        int port = 50051;
-        String name = "SustainableTrackServer";
-        String type = "_grpc._tcp.local.";
-        // JmDNS
-        JmDNS jmdns = JmDNS.create(InetAddress.getLocalHost());
-
+        Logger logger = Logger.getLogger(LoginServer.class.getName());
+        // intance class
         SustainableTrackServer sustainableTrackServer = new SustainableTrackServer();
-        try {
-            // Builde Server 
+        int port = 50051;
+        try{
+            // Create Server 
             Server server = ServerBuilder.forPort(port).addService(sustainableTrackServer).build().start();
-            // register
-            ServiceInfo info = ServiceInfo.create(type, name, port, "service=SustainableTrackServer;version=1");
-            jmdns.registerService(info);
-            logger.info("ProducttrackServer started, listening on port: " + port);
-            // keep running
+            
+            logger.info("Server started, listening on " + port);
             server.awaitTermination();
-
-        } catch (IOException e) {
+        }catch(IOException e){
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        }catch (InterruptedException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
