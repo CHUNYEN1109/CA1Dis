@@ -35,26 +35,7 @@ import java.util.logging.Logger;
  */
 public class LoginServer extends LoginServiceImplBase {
     
-    // single register for testing
-    public static void main(String[] args){
-        Logger logger = Logger.getLogger(LoginServer.class.getName());
-        // intance class
-        LoginServer loginServer = new LoginServer();
-        int port = 50051;
-        try{
-            // Create Server 
-            Server server = ServerBuilder.forPort(port).addService(loginServer).build().start();
-            
-            logger.info("Server started, listening on " + port);
-            server.awaitTermination();
-        }catch(IOException e){
-            e.printStackTrace();
-        }catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    
-    }
+
 
     // method
     // wrap Confirmation including boolean result and String message
