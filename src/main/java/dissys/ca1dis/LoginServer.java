@@ -4,30 +4,21 @@
  */
 package dissys.ca1dis;
 // tools
+import io.grpc.stub.StreamObserver;
 
 import generated.grpc.loginService.LoginRequest;
 import generated.grpc.loginService.LoginResponse;
-import java.util.logging.Logger;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import java.io.IOException;
 
+// LoginService
 import generated.grpc.loginService.LoginServiceGrpc.LoginServiceImplBase;
 import generated.grpc.loginService.LogoutRequest;
 import generated.grpc.loginService.LogoutResponse;
-import io.grpc.stub.StreamObserver;
 import generated.grpc.loginService.Confirmation;
 
 // DB class
 import data.manager.AccountManager;
 
-// jmdns
-import jmdns.ServiceRegistration;
-import java.net.InetAddress;
-import javax.jmdns.JmDNS;
-import javax.jmdns.ServiceInfo;
 
-import java.util.logging.Logger;
 
 /**
  *
@@ -37,7 +28,8 @@ public class LoginServer extends LoginServiceImplBase {
     
 
 
-    // method
+    // Return: None
+    // Parameters: LoginRequest, StreamObserver<LoginResponse>
     // wrap Confirmation including boolean result and String message
     @Override
     public void loginSystem(LoginRequest request, StreamObserver<LoginResponse> responseObserver) {
@@ -46,9 +38,11 @@ public class LoginServer extends LoginServiceImplBase {
         // Instantial DB class
         AccountManager am = new AccountManager();
 
+        //Receive quest from client and extract data from request
         String userId = request.getId();
         String UserPassword = request.getPassword();
 
+        // Process
         boolean flag = am.validate(userId, UserPassword);
         // set confirmation
         Confirmation conf;

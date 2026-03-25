@@ -6,9 +6,6 @@ package dissys.ca1dis;
 
 // tools
 import java.util.logging.Logger;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import java.io.IOException;
 import java.time.LocalTime;
 import io.grpc.stub.StreamObserver;
 
@@ -19,11 +16,7 @@ import generated.grpc.virtualPetService.VirtualPetRequest;
 
 import generated.grpc.sustainableActivityService.PersonalCredit;
 
-// jmdns
-import jmdns.ServiceRegistration;
-import java.net.InetAddress;
-import javax.jmdns.JmDNS;
-import javax.jmdns.ServiceInfo;
+
 
 /**
  *
@@ -33,28 +26,6 @@ public class VirtualPetServer extends VirtualPetImplBase {
 
     // Logger class to track info 
     private static Logger logger = Logger.getLogger(VirtualPetServer.class.getName());
-
-    public static void main(String[] args) throws Exception {
-        // Create one or more Server instance
-        VirtualPetServer virtualPetServer = new VirtualPetServer();
-        // Define port number
-        int port = 50051;
-        // Build Server with port number and register server instance
-        try{
-            Server server = ServerBuilder.forPort(port).addService(virtualPetServer).build().start();
-            logger.info("Server started, listening on " + port);
-            // Keep server running 
-            server.awaitTermination();
-            // Handle Exceptions
-        }catch(IOException e){
-            // for start()
-            e.printStackTrace();
-        }catch(InterruptedException e){
-            // for awaitTermination()
-            e.printStackTrace();
-        }
-        
-    }
 
     /**
      * SERVER STREAMING Pet status

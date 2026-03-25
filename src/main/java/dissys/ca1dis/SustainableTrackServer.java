@@ -6,9 +6,6 @@ package dissys.ca1dis;
 
 // tools
 import java.util.logging.Logger;
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
-import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import io.grpc.stub.StreamObserver;
@@ -25,12 +22,6 @@ import generated.grpc.sustainableActivityService.ActivitySummary;
 import generated.grpc.sustainableActivityService.PersonalCredit;
 import generated.grpc.sustainableActivityService.ActivityType;
 
-// jmdns
-import jmdns.ServiceRegistration;
-import java.net.InetAddress;
-import javax.jmdns.JmDNS;
-import javax.jmdns.ServiceInfo;
-
 /**
  *
  * @author brad1109
@@ -40,24 +31,6 @@ public class SustainableTrackServer extends ActivityTrackImplBase {
     // Logger class to track info 
     private static Logger logger = Logger.getLogger(SustainableTrackServer.class.getName());
 
-    public static void main(String[] args)throws Exception {
-        Logger logger = Logger.getLogger(LoginServer.class.getName());
-        // intance class
-        SustainableTrackServer sustainableTrackServer = new SustainableTrackServer();
-        int port = 50051;
-        try{
-            // Create Server 
-            Server server = ServerBuilder.forPort(port).addService(sustainableTrackServer).build().start();
-            
-            logger.info("Server started, listening on " + port);
-            server.awaitTermination();
-        }catch(IOException e){
-            e.printStackTrace();
-        }catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Client Stream get the activity info rpc SustainableTrack(stream
