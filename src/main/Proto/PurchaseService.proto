@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+
+option java_multiple_files = true;
+option java_package = "generated.grpc.productTrackService";
+option java_outer_classname = "ProductTrackServiceProto";
+
+package productTrackService;
+
+// The service definition
+// Type of Service : bidi Stream type 
+//Function: This service uses to fetch a stream of product information including amount of carbon dioxide, material //type through  a stream of barcodes or QR codes.
+service ProductTrack{
+    // get information of product.
+    rpc PurchaseTrack(stream ProductRequest) returns (stream ProductReply);
+}
+
+// Set request and Reply messages 
+
+message ProductRequest{
+    // ID insteasd of BarCode and QR code to connect the API of product information
+    string productId = 1;
+    
+}
+
+message ProductReply{
+    double carbon = 1;
+    string manufacturer =2; 
+    string description =3; 
+    int32 impactPoint =4; 
+    string productId = 5;
+    
+}

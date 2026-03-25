@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "generated.grpc.sustainableActivityService";
+option java_outer_classname = "SustainableActivityProto";
+
+package sustainableActivityService;
+
+// The service definition
+// Type of Service : Client Stream 
+//Function: Client provides a stream of activities. Service returns the day information of carbon dioxide the user //contributed.
+
+service ActivityTrack{
+    // get information of product.
+    rpc TrackActivity(stream ActivityRequest) returns (ActivityReply);
+}
+
+// Set request and Reply messages 
+
+// send activity info
+message ActivityRequest{
+    // type of activity
+    ActivityType activityType = 1;
+    
+}
+
+
+// return result of the activity and number of credit
+message ActivityReply{
+    string day = 1; // DD-MM-YYYY
+    ActivitySummary summary = 2;
+    PersonalCredit personalCredit = 3;
+    
+}
+
+// supported messages
+
+// ActivitySummary detail for return list and Request; info from Request and some of them from calculation.
+message ActivitySummary{
+    ActivityType activityType = 1;
+    int32 credit = 2;
+    double carbon = 3;
+}
+
+// the message to collect credit point for calculation.As well as for other proto to use.
+message PersonalCredit{
+    int32 totalCredit =1;
+}
+
+// enum to have one list of activity types.
+enum ActivityType{
+    ACTIVITY_TYPE_UNSPECIFIED = 0;
+    WALK = 1;
+    METRO = 2;
+    BUS = 3;
+}

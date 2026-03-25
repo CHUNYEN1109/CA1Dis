@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+import "SustainableActivityService.proto";
+
+option java_multiple_files = true;
+option java_package = "generated.grpc.virtualPetService";
+option java_outer_classname = "VirtualPetProto";
+
+package virtualPetService;
+
+// The service definition
+// Type of Service : Service Stream
+//Function: Fetch Personal Credit or Pet Level
+
+service VirtualPet{
+    rpc GetPetStatus(VirtualPetRequest) returns (stream VirtualPetReply);
+}
+
+// Set request and Reply messages 
+// ask for pet condition 
+message VirtualPetRequest{
+    
+}
+
+
+// return the pet's credit and level
+message VirtualPetReply{
+    sustainableActivityService.PersonalCredit personalCredit  = 1; 
+    int32 level = 2;
+    
+}
+
+
