@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package dissys.ca1dis;
-
+import userAndServer.RCPgameClient;
 /**
  *
  * @author brad1109
@@ -17,6 +17,12 @@ public class LoginSystemGui extends javax.swing.JFrame {
     /**
      * Creates new form MyGui
      */
+//    public LoginSystemGui(RCPgameClient client) {
+//        this.client = client;
+//        initComponents();
+//        this.setLocationRelativeTo(null);
+//    }
+
     public LoginSystemGui(RCPgameClient client) {
         this.client = client;
         initComponents();
@@ -157,6 +163,7 @@ public class LoginSystemGui extends javax.swing.JFrame {
                     this.dispose();
                     
                 }else{
+                    // if it is failed; clear input id and password.
                     loginSystemResult.setText("Login failed...");  
                     userIdTextField.setText("");
                     passwordTextField.setText("");

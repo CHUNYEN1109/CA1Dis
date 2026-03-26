@@ -9,6 +9,8 @@ import generated.grpc.sustainableActivityService.ActivityRequest;
 import generated.grpc.sustainableActivityService.ActivityReply;
 import generated.grpc.sustainableActivityService.ActivityType;
 
+import userAndServer.RCPgameClient;
+
 /**
  *
  * @author brad1109

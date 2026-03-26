@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dissys.ca1dis;
+package userAndServer;
 // IO and util tools
+import dissys.ca1dis.*;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
@@ -43,6 +44,7 @@ import java.util.function.Consumer;
 import jmdns.ServiceDiscovery;
 import javax.jmdns.ServiceInfo;
 
+import dissys.ca1dis.LoginSystemGui;
 /**
  *
  * @author brad1109
