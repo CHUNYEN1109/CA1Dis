@@ -36,6 +36,7 @@ public class VirtualPetServer extends VirtualPetImplBase {
      */
     public void getPetStatus(VirtualPetRequest request, StreamObserver<VirtualPetReply> responseObserver) {
         System.out.println(LocalTime.now().toString() + ": received a message: Request pet status.");
+        // Validate request, but in this case is unescessary 
         // Personal Credit and level
         PersonalCredit p = PersonalCredit.newBuilder().setTotalCredit(5).build();
         // set reply
