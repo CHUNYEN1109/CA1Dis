@@ -1,5 +1,17 @@
+# Build output
+/build/
+/dist/
+/target/
+/generated/
+/generated/grpc/
+
+# NetBeans private files
+/nbproject/private/
+
+# IDE files
+/.idea/
+*.iml
+
+# OS files
 .DS_Store
-target/
-*.class
-.idea/
-.vscode/
+Thumbs.db
